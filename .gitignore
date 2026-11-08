@@ -1,0 +1,10 @@
+.hosting/
+.env
+.env.*
+*.clixml
+*.pem
+*.key
+*.zip
+node_modules/
+.DS_Store
+Thumbs.db

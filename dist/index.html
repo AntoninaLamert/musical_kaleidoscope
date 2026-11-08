@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#06080c">
+  <title>Музыкальный калейдоскоп</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 3 57 18 57 46 32 61 7 46 7 18Z' fill='%23090d15' stroke='%2378f8dc' stroke-width='3'/%3E%3Cpath d='M32 3 7 46 57 46Z' fill='none' stroke='%2378f8dc'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./style.css">
+  <script defer src="./vendor/meyda.min.js"></script>
+  <script defer src="./js/app.bundle.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="Музыкальный калейдоскоп"><svg viewBox="0 0 40 44" aria-hidden="true"><path d="M20 2 37 12 37 32 20 42 3 32 3 12Z M20 2 3 32 37 32 20 2 M3 12 20 42 37 12Z"/></svg><span>KALEIDO<span class="brand-sub">МУЗЫКАЛЬНЫЙ КАЛЕЙДОСКОП</span></span></a>
+    <div class="header-center"><span class="status-dot"></span> ЗВУК ОБРЕТАЕТ ФОРМУ</div>
+    <div class="show-tools" aria-label="Управление шоу">
+      <button id="artist-toggle" aria-pressed="false">✧ Художник</button>
+      <button id="record-start">● Запись</button><button id="record-stop" hidden>■ Завершить</button><span id="record-status" role="status" hidden></span>
+      <button id="fullscreen">На весь экран</button><button id="hide-panels" title="Скрыть панели (H)">Скрыть панели</button>
+    </div>
+  </header>
+  <main>
+    <section class="stage" aria-label="Интерактивная музыкальная скульптура">
+      <div id="scene"></div>
+      <div class="stage-intro"><span class="eyebrow">ЖИВАЯ СКУЛЬПТУРА / 01</span><h1>Увидеть музыку.</h1><p>Каждый звук оставляет свет.</p></div>
+      <nav class="shapes" aria-label="Форма скульптуры">
+        <span class="panel-label">ФОРМА</span>
+        <button data-shape="sphere" aria-pressed="false"><svg viewBox="0 0 28 28"><circle cx="14" cy="14" r="10"/><ellipse cx="14" cy="14" rx="4" ry="10"/><path d="M4 14h20"/></svg><span>Сфера</span></button>
+        <button data-shape="cube" aria-pressed="false"><svg viewBox="0 0 28 28"><path d="m14 3 10 6v11l-10 5-10-5V9Zm0 11 10-5M14 14 4 9m10 5v11"/></svg><span>Куб</span></button>
+        <button data-shape="pyramid" aria-pressed="false"><svg viewBox="0 0 28 28"><path d="m14 3 11 19-12 4L3 20Zm0 0-1 23M3 20l10-4 12 6"/></svg><span>Пирамида</span></button>
+        <button data-shape="crystal" aria-pressed="true"><svg viewBox="0 0 28 28"><path d="m14 2 9 10-2 7-7 7-8-8-2-6Zm0 0-4 11 4 13 5-13ZM4 12l6 1h9l4-1"/></svg><span>Кристалл</span></button>
+        <button data-shape="star" aria-pressed="false"><svg viewBox="0 0 28 28"><path d="m14 2 3 8 9 1-7 6 2 9-7-5-8 5 2-9-6-6 9-1Z"/></svg><span>Звезда</span></button>
+        <button data-shape="torus" aria-pressed="false"><svg viewBox="0 0 28 28"><ellipse cx="14" cy="14" rx="12" ry="8" transform="rotate(-30 14 14)"/><ellipse cx="14" cy="14" rx="6" ry="3" transform="rotate(-30 14 14)"/></svg><span>Тор</span></button>
+      </nav>
+      <aside class="sound-panel"><span class="panel-label">ЗВУКОВОЙ СПЕКТР</span><div class="spectrum" id="spectrum" aria-hidden="true"></div><div class="frequency"><span>НИЗКИЕ</span><span>ВЫСОКИЕ</span></div><div class="bpm"><strong id="bpm">—</strong><span>BPM <small>оценка ритма</small></span></div><p id="analysis-status">В ожидании музыки</p></aside>
+      <div class="scene-caption"><span class="tiny-cross">+</span><span id="shape-name">КРИСТАЛЛ</span><span class="caption-divider"></span><span>ПЕРЕТАЩИТЕ, ЧТОБЫ ВРАЩАТЬ</span></div>
+      <div class="quality"><span class="status-dot"></span><span id="quality">АДАПТИВНОЕ КАЧЕСТВО</span></div>
+      <div id="scene-error" class="scene-error" hidden></div>
+    </section>
+    <section id="artist-tools" class="artist-tools" aria-label="Инструменты художника" hidden>
+      <span class="panel-label">ВАШ ОРНАМЕНТ</span><p>Рисуйте на фоне мышью или пальцем.</p>
+      <label>Цвет <input id="brush-color" type="color" value="#9fffe3"></label>
+      <label>Толщина <output id="brush-value">5</output><input id="brush-width" aria-label="Толщина кисти" type="range" min="1" max="18" value="5"></label>
+      <button id="artist-clear">Очистить рисунок</button>
+    </section>
+    <section class="kaleido-controls" aria-label="Настройки калейдоскопа">
+      <div class="kaleido-heading"><span class="panel-label">КАЛЕЙДОСКОП</span><button id="kaleido-auto" aria-pressed="true"><span class="status-dot"></span> Авто</button></div>
+      <div class="kaleido-styles" role="group" aria-label="Стиль калейдоскопа">
+        <button data-style="0" aria-pressed="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2c9 6 9 14 0 20C3 16 3 8 12 2ZM2 12c6-9 14-9 20 0-6 9-14 9-20 0Z"/></svg><span>Мандала</span></button>
+        <button data-style="1" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="m12 2 9 7-9 13L3 9Zm0 0L8 9l4 13 4-13ZM3 9h18"/></svg><span>Кристаллы</span></button>
+        <button data-style="2" aria-pressed="false"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><ellipse cx="12" cy="12" rx="11" ry="3" transform="rotate(-30 12 12)"/><path d="M4 3v3M2.5 4.5h3M19 18v4m-2-2h4"/></svg><span>Космос</span></button>
+        <button data-style="3" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M12 10c-8-13-15 1-3 3-8 11 8 14 5 2 13 4 14-12 1-7 1-8-8-8-3 2Z"/><circle cx="12" cy="12" r="2"/></svg><span>Цветы</span></button>
+        <button data-style="4" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="m12 21-10-16m10 16L7 2m5 19V1m0 20 5-19m-5 19L22 5M3 11h18"/></svg><span>Лазерное шоу</span></button>
+      </div>
+      <div class="kaleido-sliders">
+        <label for="kaleido-symmetry"><span>Симметрия <output id="symmetry-value">12</output></span><input id="kaleido-symmetry" type="range" min="4" max="24" step="2" value="12"></label>
+        <label for="kaleido-intensity"><span>Интенсивность <output id="intensity-value">62%</output></span><input id="kaleido-intensity" type="range" min="0" max="100" step="1" value="62"></label>
+      </div>
+    </section>
+    <section class="player" aria-label="Музыкальный проигрыватель">
+      <div class="track-info"><div class="album-art"><svg viewBox="0 0 32 32"><path d="M13 23V7l14-3v16M13 12l14-3"/><ellipse cx="8" cy="24" rx="5" ry="3"/><ellipse cx="22" cy="21" rx="5" ry="3"/></svg></div><div class="track-text"><span class="eyebrow" id="track-count">ВАША МУЗЫКА</span><h2 id="track-title">Начните со звука</h2><p id="track-subtitle">Добавьте любимые треки в формате mp3</p></div></div>
+      <div class="transport"><div class="transport-buttons"><button class="icon-button" id="previous" aria-label="Предыдущий трек" disabled><svg viewBox="0 0 24 24"><path d="M5 5v14m14-14L8 12l11 7Z"/></svg></button><button class="play-button" id="play" aria-label="Воспроизвести" disabled><svg id="play-icon" viewBox="0 0 24 24"><path d="m9 5 11 7-11 7Z"/></svg></button><button class="icon-button" id="next" aria-label="Следующий трек" disabled><svg viewBox="0 0 24 24"><path d="M19 5v14M5 5l11 7-11 7Z"/></svg></button></div><div class="seek-row"><time id="elapsed">0:00</time><input id="seek" aria-label="Позиция воспроизведения" type="range" min="0" max="1000" value="0" disabled><time id="duration">0:00</time></div></div>
+      <div class="player-actions"><div class="volume"><svg viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4Zm4 3q6 4 0 8m3-11q9 7 0 14"/></svg><input id="volume" aria-label="Громкость" type="range" min="0" max="1" step="0.01" value="0.75"></div><button id="upload" class="upload-button"><span>＋</span> Загрузить mp3</button><input type="file" id="files" accept=".mp3,audio/mpeg" multiple hidden><button id="playlist-toggle" class="icon-button" aria-label="Открыть плейлист" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M3 5h18M3 12h12M3 19h9m7-5v8m-4-4h8"/></svg><span id="playlist-count">0</span></button></div>
+    </section>
+    <footer><span>СОЗДАНО ИЗ ЗВУКА И СВЕТА</span><span>Локально. Только ваша музыка.<span class="footer-dot">·</span> CROSSFADE 2.5 S</span></footer>
+  </main>
+  <aside id="playlist" class="playlist" hidden><div class="playlist-heading"><h2>Ваша коллекция</h2><button class="icon-button" id="close-playlist" aria-label="Закрыть плейлист">×</button></div><ol id="track-list"></ol><p id="playlist-empty">Загрузите mp3 — они появятся здесь.</p></aside>
+  <div id="drop-overlay" hidden><span>Отпустите музыку здесь</span><small>Несколько mp3 · один непрерывный поток</small></div>
+  <div id="reveal-zone" aria-hidden="true"></div><button id="show-panels">Показать панели</button>
+  <dialog id="record-result"><h2>Ваше световое шоу</h2><p id="record-format"></p><video id="record-preview" controls playsinline></video><div><a id="record-download" download>Сохранить видео</a><button id="record-close">Закрыть</button></div></dialog>
+  <div id="toast" role="status" hidden></div>
+</body>
+</html>

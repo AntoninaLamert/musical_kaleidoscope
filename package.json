@@ -1,0 +1,11 @@
+{
+  "name": "musical-kaleidoscope",
+  "private": true,
+  "version": "3.0.0",
+  "type": "module",
+  "description": "Локальная музыкальная скульптура и пять живых калейдоскопов на Three.js и Meyda",
+  "scripts": {
+    "start": "node server.mjs",
+    "build": "node build.mjs"
+  }
+}
